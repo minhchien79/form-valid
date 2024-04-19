@@ -30,32 +30,25 @@ const userReducer = (state = initialState, action) => {
     case ActionType.KEYWORD_USER:
       return { ...state, keyword: action.payload };
 
-      case ActionType.SUBMIT_USER: {
-        const user = action.payload;
-        const listUsersClone = [...state.listUsers];
-        if (user.id) {
-          // UPDATE
-          const index = listUsersClone.findIndex((item) => item.maSV === user.maSV);
-          if (index !== -1) {
-            listUsersClone[index] = user;
-          }
-        } else {
-          //ADD
-          const date = new Date();
-          // clone user
-          const userNew = { ...user, maSV: date.getTime() };
-          listUsersClone.push(userNew);
-        }
-  
-        state.listUsers = listUsersClone;
-        return { ...state };
+    case ActionType.SUBMIT_USER: {
+      const user = action.payload;
+      const listUsersClone = [...state.listUsers];
+      const index = listUsersClone.findIndex((item) => item.maSV === user.maSV);
+      if (index !== -1) {
+        // UPDATE
+        listUsersClone[index] = user;
+      } else {
+        // ADD
+        listUsersClone.push(user);
       }
+      return { ...state, listUsers: listUsersClone };
+    }
 
     case ActionType.EDIT_USER:
       return { ...state, editUser: action.payload };
 
     default:
-      return {...state};
+      return state;
   }
 };
 
